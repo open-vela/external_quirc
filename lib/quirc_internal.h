@@ -27,8 +27,7 @@
 #define QUIRC_MAX_REGIONS	254
 #endif
 #define QUIRC_MAX_CAPSTONES	32
-#define QUIRC_MAX_GRIDS		(QUIRC_MAX_CAPSTONES * 2)
-
+#define QUIRC_MAX_GRIDS		8
 #define QUIRC_PERSPECTIVE_PARAMS	8
 
 #if QUIRC_MAX_REGIONS < UINT8_MAX
@@ -68,6 +67,8 @@ struct quirc_grid {
 
 	/* Timing pattern endpoints */
 	struct quirc_point	tpep[3];
+	int			hscan;
+	int			vscan;
 
 	/* Grid size and perspective transform */
 	int			grid_size;
