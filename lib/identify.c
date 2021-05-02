@@ -380,8 +380,7 @@ static void record_capstone(struct quirc *q, int ring, int stone)
 	perspective_map(capstone->c, 3.5, 3.5, &capstone->center);
 }
 
-static void test_capstone(struct quirc *q, unsigned int x, unsigned int y,
-			  unsigned int *pb)
+static void test_capstone(struct quirc *q, int x, int y, int *pb)
 {
 	int ring_right = region_code(q, x - pb[4], y);
 	int stone = region_code(q, x - pb[4] - pb[3] - pb[2], y);
@@ -390,7 +389,7 @@ static void test_capstone(struct quirc *q, unsigned int x, unsigned int y,
 				    y);
 	struct quirc_region *stone_reg;
 	struct quirc_region *ring_reg;
-	unsigned int ratio;
+	int ratio;
 
 	if (ring_left < 0 || ring_right < 0 || stone < 0)
 		return;
@@ -418,14 +417,14 @@ static void test_capstone(struct quirc *q, unsigned int x, unsigned int y,
 	record_capstone(q, ring_left, stone);
 }
 
-static void finder_scan(struct quirc *q, unsigned int y)
+static void finder_scan(struct quirc *q, int y)
 {
 	quirc_pixel_t *row = q->pixels + y * q->w;
-	unsigned int x;
+	int x;
 	int last_color = 0;
-	unsigned int run_length = 0;
-	unsigned int run_count = 0;
-	unsigned int pb[5];
+	int run_length = 0;
+	int run_count = 0;
+	int pb[5];
 
 	memset(pb, 0, sizeof(pb));
 	for (x = 0; x < q->w; x++) {
@@ -438,18 +437,17 @@ static void finder_scan(struct quirc *q, unsigned int y)
 			run_count++;
 
 			if (!color && run_count >= 5) {
-				const int scale = 16;
-				static const unsigned int check[5] = {1, 1, 3, 1, 1};
-				unsigned int avg, err;
-				unsigned int i;
+				static int check[5] = {1, 1, 3, 1, 1};
+				int avg, err;
+				int i;
 				int ok = 1;
 
-				avg = (pb[0] + pb[1] + pb[3] + pb[4]) * scale / 4;
+				avg = (pb[0] + pb[1] + pb[3] + pb[4]) / 4;
 				err = avg * 3 / 4;
 
 				for (i = 0; i < 5; i++)
-					if (pb[i] * scale < check[i] * avg - err ||
-					    pb[i] * scale > check[i] * avg + err)
+					if (pb[i] < check[i] * avg - err ||
+					    pb[i] > check[i] * avg + err)
 						ok = 0;
 
 				if (ok)
@@ -1026,7 +1024,7 @@ static void test_neighbours(struct quirc *q, int i,
 	record_qr_grid(q, best_h, i, best_v);
 }
 
-static void test_grouping(struct quirc *q, unsigned int i)
+static void test_grouping(struct quirc *q, int i)
 {
 	struct quirc_capstone *c1 = &q->capstones[i];
 	int j;
