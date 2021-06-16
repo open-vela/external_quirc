@@ -125,15 +125,8 @@ static int scan_file(const char *path, const char *filename,
 
 		quirc_extract(decoder, i, &code);
 
-		quirc_decode_error_t err = quirc_decode(&code, &data);
-		if (err == QUIRC_ERROR_DATA_ECC) {
-			quirc_flip(&code);
-			err = quirc_decode(&code, &data);
-		}
-
-		if (!err) {
+		if (!quirc_decode(&code, &data))
 			info->decode_count++;
-		}
 	}
 
 	(void)clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
@@ -157,14 +150,12 @@ static int scan_file(const char *path, const char *filename,
 
 			if (want_verbose) {
 				struct quirc_data data;
-				quirc_decode_error_t err = quirc_decode(&code, &data);
-				if (err == QUIRC_ERROR_DATA_ECC) {
-					quirc_flip(&code);
-					err = quirc_decode(&code, &data);
-				}
+				quirc_decode_error_t err =
+					quirc_decode(&code, &data);
 
 				if (err) {
-					printf("  ERROR: %s\n\n", quirc_strerror(err));
+					printf("  ERROR: %s\n\n",
+					       quirc_strerror(err));
 				} else {
 					printf("  Decode successful:\n");
 					dump_data(&data);
