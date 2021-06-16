@@ -20,10 +20,6 @@
 #include "dthash.h"
 #include "quirc.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Check if we've seen the given code, and if not, print it on stdout.
  * Include version info if requested.
  */
@@ -34,9 +30,5 @@ void print_data(const struct quirc_data *data, struct dthash *dt,
  * integers. Returns 0 on success or -1 if a parser error occurs.
  */
 int parse_size(const char *text, int *video_width, int *video_height);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

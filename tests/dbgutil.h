@@ -19,10 +19,6 @@
 
 #include "quirc.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Dump decoded information on stdout. */
 void dump_data(const struct quirc_data *data);
 
@@ -48,9 +44,5 @@ int check_if_png(const char *filename);
  * successfully (0).
  */
 int load_png(struct quirc *q, const char *filename);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
