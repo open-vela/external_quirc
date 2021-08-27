@@ -39,15 +39,7 @@ OPENCV_CFLAGS != pkg-config --cflags opencv4
 OPENCV_LIBS != pkg-config --libs opencv4
 QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) $(OPENCV_CFLAGS) --std=c++17
 
-.PHONY: all v4l sdl opencv install uninstall clean
-
-all: libquirc.so qrtest
-
-v4l: quirc-scanner
-
-sdl: inspect quirc-demo
-
-opencv: inspect-opencv quirc-demo-opencv
+all: libquirc.so qrtest inspect quirc-demo quirc-scanner
 
 qrtest: tests/dbgutil.o tests/qrtest.o libquirc.a
 	$(CC) -o $@ tests/dbgutil.o tests/qrtest.o libquirc.a $(LDFLAGS) -lm -ljpeg -lpng
