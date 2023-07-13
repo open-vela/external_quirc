@@ -413,9 +413,9 @@ static void find_other_corners(void *user_data, int y, int left, int right)
 	int i;
 
 	for (i = 0; i < 2; i++) {
-		int up = xs[i] * psd->ref.x + y * psd->ref.y;
-		int right = xs[i] * -psd->ref.y + y * psd->ref.x;
-		int scores[4] = {up, right, -up, -right};
+		int up_score = xs[i] * psd->ref.x + y * psd->ref.y;
+		int right_score = xs[i] * -psd->ref.y + y * psd->ref.x;
+		int scores[4] = {up_score, right_score, -up_score, -right_score};
 		int j;
 
 		for (j = 0; j < 4; j++) {
